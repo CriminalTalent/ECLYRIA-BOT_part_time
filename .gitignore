@@ -1,0 +1,6 @@
+credentials.json
+.env
+last_mention_id.txt
+*.log
+.bundle/
+vendor/
