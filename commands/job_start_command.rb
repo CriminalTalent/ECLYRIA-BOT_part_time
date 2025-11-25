@@ -206,7 +206,7 @@ class JobStartCommand
     lines = []
     lines << "@#{user_id}"
     lines << "━━━━━━━━━━━━━━━━━━"
-    lines << "📚 #{job_name} 완료!"
+    lines << "#{job_name} 완료!"
     lines << "━━━━━━━━━━━━━━━━━━"
     lines << ""
     
@@ -223,7 +223,7 @@ class JobStartCommand
                  "아쉬움"
                end
       
-      lines << "🎲 작업 #{roll[:number]}: [#{roll[:roll]}+보너스] = #{roll[:modified]} → #{roll[:performance]}% #{status}"
+      lines << "작업 #{roll[:number]}: [#{roll[:roll]}+보너스] = #{roll[:modified]} → #{roll[:performance]}% #{status}"
       lines << "   #{roll[:event]}"
       lines << ""
     end
