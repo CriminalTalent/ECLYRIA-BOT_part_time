@@ -82,6 +82,25 @@ class SheetManager
     false
   end
 
+  # 갈레온 업데이트 (상점봇 사용자 시트)
+  def update_galleons(user_id, new_amount)
+    rows = read_values("사용자!A:K")
+    return false unless rows
+
+    headers = rows[0]
+    rows.each_with_index do |row, idx|
+      next if idx == 0
+      next unless row[0]&.gsub('@', '') == user_id.gsub('@', '')
+
+      # 갈레온은 C열 (인덱스 2)
+      row[2] = new_amount.to_s
+      
+      update_values("사용자!A#{idx+1}:K#{idx+1}", [row])
+      return true
+    end
+    false
+  end
+
   # 아르바이트 목록 가져오기
   def get_jobs
     rows = read_values("아이템!A:Z")
