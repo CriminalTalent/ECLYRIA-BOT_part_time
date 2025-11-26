@@ -64,7 +64,7 @@ class JobListCommand
     lines << ""
 
     JOBS.each do |job|
-      lines << "   #{job[:name]} (#{job[:time]})"
+      lines << "#{job[:name]} (#{job[:time]})"
       lines << "   #{job[:description]}"
       lines << "   기본 급여: #{job[:base_pay]}갈레온"
       lines << "   판정 스탯: #{stat_korean(job[:stat])}"
