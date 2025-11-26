@@ -73,7 +73,7 @@ class JobStartCommand
     if on_cooldown?(user_id)
       remaining = cooldown_remaining(user_id)
       @mastodon_client.reply(
-        "@#{user_id} 아직 피곤하시군요! #{remaining}분 후에 다시 올 수 있어요.",
+        "@#{user_id} 아직 피곤하시군요! #{remaining} 후에 다시 올 수 있어요.",
         reply_status['id']
       )
       return
@@ -112,7 +112,14 @@ class JobStartCommand
   def cooldown_remaining(user_id)
     elapsed = Time.now - @@last_job_time[user_id]
     remaining_seconds = (COOLDOWN_HOURS * 3600) - elapsed
-    (remaining_seconds / 60).ceil
+    hours = (remaining_seconds / 3600).floor
+    minutes = ((remaining_seconds % 3600) / 60).ceil
+    
+    if hours > 0
+      "약 #{hours}시간 #{minutes}분"
+    else
+      "약 #{minutes}분"
+    end
   end
 
   def perform_job(user, job, job_name)
@@ -156,6 +163,11 @@ class JobStartCommand
     # 3연속 고득점 보너스 체크
     bonus = check_streak_bonus(rolls)
     final_pay += bonus if bonus > 0
+    
+    # 갈레온 실제 반영 - 사용자 시트에서 현재 갈레온 가져오기
+    current_galleons = get_current_galleons(user[:id] || user["아이디"])
+    new_galleons = current_galleons + final_pay
+    @sheet_manager.update_galleons(user[:id] || user["아이디"], new_galleons)
     
     {
       rolls: rolls,
@@ -202,6 +214,20 @@ class JobStartCommand
     end
   end
 
+  def get_current_galleons(user_id)
+    # 사용자 시트에서 현재 갈레온 가져오기
+    rows = @sheet_manager.read_values("사용자!A:K")
+    return 0 unless rows
+
+    rows.each_with_index do |row, idx|
+      next if idx == 0
+      if row[0]&.gsub('@', '') == user_id.gsub('@', '')
+        return (row[2] || 0).to_i  # C열이 갈레온
+      end
+    end
+    0
+  end
+
   def build_result_message(user_id, name, job_name, result)
     lines = []
     lines << "@#{user_id}"
@@ -212,18 +238,18 @@ class JobStartCommand
     
     result[:rolls].each do |roll|
       status = if roll[:critical]
-                 "대성공!"
+                 "[대성공!]"
                elsif roll[:fumble]
-                 "실패..."
+                 "[실패...]"
                elsif roll[:performance] >= 80
-                 "훌륭함"
+                 "[훌륭함]"
                elsif roll[:performance] >= 50
-                 "괜찮음"
+                 "[괜찮음]"
                else
-                 "아쉬움"
+                 "[아쉬움]"
                end
       
-      lines << "작업 #{roll[:number]}: [#{roll[:roll]}+보너스] = #{roll[:modified]} → #{roll[:performance]}% #{status}"
+      lines << "작업 #{roll[:number]}: [#{roll[:roll]}+보너스] = #{roll[:modified]} -> #{roll[:performance]}% #{status}"
       lines << "   #{roll[:event]}"
       lines << ""
     end
