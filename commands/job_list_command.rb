@@ -7,14 +7,14 @@ class JobListCommand
       name: "도서관 사서 보조",
       time: "2시간",
       base_pay: 10,
-      description: "마담 핀스를 도와 책을 정리합니다",
+      description: "마담을 도와 책을 정리합니다",
       stat: :luck
     },
     {
       name: "온실 관리 조수",
       time: "3시간",
       base_pay: 15,
-      description: "스프라우트 교수의 식물들을 돌봅니다",
+      description: "교수님의 식물들을 돌봅니다",
       stat: :agility
     },
     {
@@ -28,7 +28,7 @@ class JobListCommand
       name: "퀴디치 용품 관리",
       time: "2시간",
       base_pay: 13,
-      description: "후치 선생님의 장비를 정리합니다",
+      description: "교수님의 장비를 정리합니다",
       stat: :attack
     }
   ]
