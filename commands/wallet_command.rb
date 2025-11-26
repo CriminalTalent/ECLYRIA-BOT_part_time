@@ -63,7 +63,7 @@ class WalletCommand
       lines << ""
       lines << "소지품:"
       items.each do |item|
-        lines << "  • #{item}"
+        lines << "  - #{item}"
       end
     end
     
