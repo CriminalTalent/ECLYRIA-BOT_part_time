@@ -7,6 +7,7 @@ $stderr.sync = true
 require 'dotenv/load'
 require 'time'
 require 'json'
+require 'set'
 
 require_relative 'mastodon_client'
 require_relative 'sheet_manager'
@@ -51,6 +52,9 @@ parser = CommandParser.new(mastodon, sheet_manager)
 LAST_ID_FILE = 'last_mention_id.txt'
 last_id = File.exist?(LAST_ID_FILE) ? File.read(LAST_ID_FILE).strip : nil
 
+# 이미 처리한 멘션 ID 추적 (메모리)
+processed_ids = Set.new
+
 puts "[대기] 멘션 감시 시작..."
 puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
@@ -59,11 +63,18 @@ loop do
   begin
     mentions = mastodon.fetch_mentions(since_id: last_id)
     
+    # 최신순으로 정렬 (오래된 것부터 처리)
+    mentions = mentions.sort_by { |m| m['id'].to_i }
+    
     mentions.each do |mention|
       next unless mention['type'] == 'mention'
       next unless mention['status']
       
       mention_id = mention['id']
+      
+      # 이미 처리한 멘션은 건너뛰기
+      next if processed_ids.include?(mention_id)
+      
       created_at = Time.parse(mention['status']['created_at'])
       
       # 봇 시작 전 멘션은 무시
@@ -79,7 +90,8 @@ loop do
       # 명령어 처리
       parser.parse(mention)
       
-      # 마지막 ID 업데이트
+      # 처리 완료 기록
+      processed_ids.add(mention_id)
       last_id = mention_id
       File.write(LAST_ID_FILE, last_id)
     end
