@@ -7,29 +7,71 @@ class JobListCommand
       name: "도서관 사서 보조",
       time: "2시간",
       base_pay: 10,
-      description: "마담을 도와 책을 정리합니다",
+      description: "고서 정리와 금지 서가 목록 관리",
       stat: :luck
     },
     {
       name: "온실 관리 조수",
       time: "3시간",
       base_pay: 15,
-      description: "교수님의 식물들을 돌봅니다",
+      description: "3학년 실습용 마법 식물 관리",
       stat: :agility
     },
     {
       name: "우편배달",
       time: "2시간",
       base_pay: 12,
-      description: "부엉이 우편을 분류하고 배달합니다",
+      description: "부엉이 우편 분류 및 긴급 배달",
       stat: :agility
     },
     {
       name: "퀴디치 용품 관리",
       time: "2시간",
       base_pay: 13,
-      description: "교수님의 장비를 정리합니다",
+      description: "경기용 장비 점검 및 정비",
       stat: :attack
+    },
+    {
+      name: "물약 재료 준비",
+      time: "2시간",
+      base_pay: 14,
+      description: "고급 물약 재료 세척과 보관",
+      stat: :luck
+    },
+    {
+      name: "마법 생물 돌보기",
+      time: "3시간",
+      base_pay: 16,
+      description: "3학년 수업용 마법 생물 관리",
+      stat: :defense
+    },
+    {
+      name: "대강당 준비",
+      time: "2시간",
+      base_pay: 11,
+      description: "행사 준비 및 식탁 배치 보조",
+      stat: :attack
+    },
+    {
+      name: "점성술 관측 보조",
+      time: "3시간",
+      base_pay: 17,
+      description: "천체 망원경 설치 및 기록 정리",
+      stat: :luck
+    },
+    {
+      name: "변신술 교실 정리",
+      time: "2시간",
+      base_pay: 12,
+      description: "변신된 물체 복구 및 교구 정리",
+      stat: :agility
+    },
+    {
+      name: "기숙사 순찰 보조",
+      time: "2시간",
+      base_pay: 13,
+      description: "야간 복도 순찰 및 규율 확인",
+      stat: :defense
     }
   ]
 
