@@ -54,7 +54,7 @@ class JobListCommand
     },
     {
       name: "점성술 관측 보조",
-      time: "3시간",
+      time: "2시간",
       base_pay: 17,
       description: "천체 망원경 설치 및 기록 정리",
       stat: :luck
@@ -101,20 +101,16 @@ class JobListCommand
     lines = []
     lines << "@#{user_id}"
     lines << "━━━━━━━━━━━━━━━━━━"
-    lines << "호그와트 아르바이트 목록"
+    lines << "호그와트 아르바이트"
     lines << "━━━━━━━━━━━━━━━━━━"
-    lines << ""
 
     JOBS.each do |job|
-      lines << "#{job[:name]} (#{job[:time]})"
-      lines << "   #{job[:description]}"
-      lines << "   기본 급여: #{job[:base_pay]}갈레온"
-      lines << "   판정 스탯: #{stat_korean(job[:stat])}"
-      lines << ""
+      stat_text = stat_korean(job[:stat])
+      lines << "#{job[:name]}(#{job[:base_pay]}G/#{stat_text})"
     end
 
-    lines << "사용법: [알바시작/이름]"
-    lines << "예: [알바시작/도서관 사서 보조]"
+    lines << "━━━━━━━━━━━━━━━━━━"
+    lines << "[알바시작/이름]으로 시작"
     
     lines.join("\n")
   end
