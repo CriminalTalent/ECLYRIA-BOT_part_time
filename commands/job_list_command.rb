@@ -12,7 +12,7 @@ class JobListCommand
     },
     {
       name: "온실 관리 조수",
-      time: "3시간",
+      time: "2시간",
       base_pay: 15,
       description: "3학년 실습용 마법 식물 관리",
       stat: :agility
@@ -40,7 +40,7 @@ class JobListCommand
     },
     {
       name: "마법 생물 돌보기",
-      time: "3시간",
+      time: "2시간",
       base_pay: 16,
       description: "3학년 수업용 마법 생물 관리",
       stat: :defense
