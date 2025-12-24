@@ -433,8 +433,8 @@ class JobStartCommand
     base_pay = job[:base_pay]
     final_pay = (base_pay * (avg_performance / 100.0)).round
     
-    # 최소 급여 보장 (크리스마스 아르바이트는 최소 기본급의 50%)
-    min_pay = job[:difficulty] == :hard ? (base_pay * 0.5).round : (base_pay * 0.3).round
+    # 최소 급여 보장 (일반/크리스마스 모두 10%)
+    min_pay = (base_pay * 0.1).round
     final_pay = [final_pay, min_pay].max
     
     # 3연속 고득점 보너스 체크
