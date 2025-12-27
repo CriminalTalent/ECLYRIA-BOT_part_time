@@ -75,64 +75,6 @@ class JobListCommand
     }
   ]
 
-  # 크리스마스 한정 아르바이트 (시급 높음, 난이도 높음)
-  CHRISTMAS_JOBS = [
-    {
-      name: "루돌프 대신 썰매끌기",
-      time: "2시간",
-      base_pay: 20,
-      description: "선물 배달용 썰매 운반",
-      stat: :agility,
-      secondary: :attack,
-      difficulty: "어려움"
-    },
-    {
-      name: "울지 않은 아이 선별하기",
-      time: "2시간",
-      base_pay: 22,
-      description: "착한 아이 명단 작성",
-      stat: :luck,
-      secondary: :defense,
-      difficulty: "어려움"
-    },
-    {
-      name: "선물 포장하기",
-      time: "2시간",
-      base_pay: 19,
-      description: "크리스마스 선물 포장",
-      stat: :agility,
-      secondary: :luck,
-      difficulty: "어려움"
-    },
-    {
-      name: "트리 장식 도우미",
-      time: "2시간",
-      base_pay: 18,
-      description: "대형 트리 장식 설치",
-      stat: :agility,
-      secondary: :attack,
-      difficulty: "어려움"
-    },
-    {
-      name: "크리스마스 케이크 배달",
-      time: "2시간",
-      base_pay: 21,
-      description: "특급 케이크 긴급 배달",
-      stat: :agility,
-      secondary: :luck,
-      difficulty: "어려움"
-    },
-    {
-      name: "산타 수염 관리",
-      time: "2시간",
-      base_pay: 18,
-      description: "수염 세탁 및 정리",
-      stat: :luck,
-      secondary: :agility,
-      difficulty: "어려움"
-    }
-  ]
-
   def initialize(mastodon_client, sheet_manager)
     @mastodon_client = mastodon_client
     @sheet_manager = sheet_manager
@@ -162,22 +104,10 @@ class JobListCommand
     lines << "호그와트 아르바이트"
     lines << "━━━━━━━━━━━━━━━━━━"
     lines << ""
-    lines << "[일반 알바]"
 
     REGULAR_JOBS.each do |job|
       stat_text = stat_korean(job[:stat])
       lines << "#{job[:name]}(#{job[:base_pay]}G/#{stat_text})"
-    end
-
-    lines << ""
-    lines << "[크리스마스 한정]"
-    lines << "(시급높음/난이도높음)"
-    lines << ""
-
-    CHRISTMAS_JOBS.each do |job|
-      stat_text = stat_korean(job[:stat])
-      secondary_text = stat_korean(job[:secondary])
-      lines << "#{job[:name]}(#{job[:base_pay]}G/#{stat_text}+#{secondary_text})"
     end
 
     lines << ""
