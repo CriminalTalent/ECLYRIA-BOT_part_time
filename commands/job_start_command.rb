@@ -2,12 +2,10 @@
 require 'time'
 
 class JobStartCommand
-  # 쿨타임 관리 (user_id => 마지막 알바 시간)
   @@last_job_time = {}
   COOLDOWN_HOURS = 2
 
   JOBS = {
-    # ===== 일반 아르바이트 =====
     "도서관 사서 보조" => {
       base_pay: 10,
       description: "고서 정리와 금지 서가 목록 관리",
@@ -17,12 +15,7 @@ class JobStartCommand
         "책들이 제자리를 찾아가고 있습니다",
         "금지 서가 근처를 신중하게 지나갔습니다",
         "오래된 마법서에서 희미한 빛이 났습니다",
-        "목록 작성이 순조롭게 진행됩니다",
-        "책장 사이에서 오래된 쪽지를 발견했습니다",
-        "조용한 도서관에서 집중해서 일했습니다",
-        "분류 작업이 매끄럽게 끝났습니다",
-        "두꺼운 책들을 조심히 옮겼습니다",
-        "책 냄새가 코를 간질였지만 계속했습니다"
+        "목록 작성이 순조롭게 진행됩니다"
       ]
     },
     "온실 관리 조수" => {
@@ -34,12 +27,7 @@ class JobStartCommand
         "식물들이 건강하게 자라고 있습니다",
         "가시에 찔릴 뻔했지만 잘 피했습니다",
         "온실 온도를 적절히 조절했습니다",
-        "독성 식물을 안전하게 다뤘습니다",
-        "뿌리가 엉킨 화분을 정리했습니다",
-        "수업 준비를 완벽하게 마쳤습니다",
-        "식물 성장 기록을 꼼꼼히 작성했습니다",
-        "새싹들이 고개를 내밀기 시작했습니다",
-        "흙을 갈아주며 뿌리를 확인했습니다"
+        "독성 식물을 안전하게 다뤘습니다"
       ]
     },
     "우편배달" => {
@@ -51,12 +39,7 @@ class JobStartCommand
         "편지를 정확한 주소로 분류했습니다",
         "급한 우편을 빠르게 처리했습니다",
         "복도를 달려 제시간에 전달했습니다",
-        "비 오는 날이었지만 우편은 무사합니다",
-        "부엉이가 다리를 내밀어 편지를 받았습니다",
-        "층계를 오르내리며 배달했습니다",
-        "수신인을 찾는 데 시간이 걸렸지만 성공했습니다",
-        "부엉이 먹이도 챙겨주었습니다",
-        "우편 가방을 정리하고 마무리했습니다"
+        "비 오는 날이었지만 우편은 무사합니다"
       ]
     },
     "퀴디치 용품 관리" => {
@@ -68,12 +51,7 @@ class JobStartCommand
         "공들이 제대로 작동하는지 확인했습니다",
         "낡은 장비를 교체 목록에 올렸습니다",
         "보호 장구를 점검하고 수리했습니다",
-        "빗자루 빗살을 손질했습니다",
-        "경기 준비가 완료되었습니다",
-        "창고를 체계적으로 정리했습니다",
-        "장비 상태를 기록했습니다",
-        "다음 경기를 위해 준비를 마쳤습니다",
-        "안전 검사를 꼼꼼히 진행했습니다"
+        "빗자루 빗살을 손질했습니다"
       ]
     },
     "물약 재료 준비" => {
@@ -85,12 +63,7 @@ class JobStartCommand
         "약초를 조심스럽게 세척했습니다",
         "보관 용기에 라벨을 붙였습니다",
         "희귀한 재료를 특별 보관했습니다",
-        "측정이 정확하게 이루어졌습니다",
-        "재고를 확인하고 정리했습니다",
-        "썩은 재료를 골라냈습니다",
-        "수업 분량을 미리 준비했습니다",
-        "냄새가 고약했지만 견뎠습니다",
-        "재료실이 깔끔하게 정돈되었습니다"
+        "측정이 정확하게 이루어졌습니다"
       ]
     },
     "마법 생물 돌보기" => {
@@ -102,12 +75,7 @@ class JobStartCommand
         "우리를 청소하고 점검했습니다",
         "날카로운 발톱을 조심히 피했습니다",
         "생물들이 차분해졌습니다",
-        "건강 상태를 확인하고 기록했습니다",
-        "위험한 순간을 침착하게 대처했습니다",
-        "새끼들을 따로 보살폈습니다",
-        "운동장을 깨끗이 치웠습니다",
-        "생물들과 신뢰를 쌓았습니다",
-        "안전 규칙을 철저히 지켰습니다"
+        "건강 상태를 확인하고 기록했습니다"
       ]
     },
     "대강당 준비" => {
@@ -119,12 +87,7 @@ class JobStartCommand
         "식탁보를 깔끔하게 펼쳤습니다",
         "장식을 정성껏 달았습니다",
         "촛불 위치를 조정했습니다",
-        "바닥을 깨끗이 닦았습니다",
-        "테이블을 정렬하고 확인했습니다",
-        "행사장이 멋지게 꾸며졌습니다",
-        "시간 내에 준비를 마쳤습니다",
-        "동료와 협력하여 작업했습니다",
-        "마지막 점검까지 완료했습니다"
+        "바닥을 깨끗이 닦았습니다"
       ]
     },
     "점성술 관측 보조" => {
@@ -136,12 +99,7 @@ class JobStartCommand
         "별의 위치를 차트에 기록했습니다",
         "구름이 걷히기를 기다렸습니다",
         "관측 장비를 점검했습니다",
-        "밤하늘이 맑아 관측이 수월했습니다",
-        "데이터를 꼼꼼히 정리했습니다",
-        "천체의 움직임을 추적했습니다",
-        "탑 위의 추운 바람을 견뎠습니다",
-        "기록 장부를 정확히 작성했습니다",
-        "관측 시간표를 확인하고 준비했습니다"
+        "밤하늘이 맑아 관측이 수월했습니다"
       ]
     },
     "변신술 교실 정리" => {
@@ -153,12 +111,7 @@ class JobStartCommand
         "교구를 체계적으로 정리했습니다",
         "실수로 변신된 것들을 찾아냈습니다",
         "주문이 남아있는 물건을 조심히 다뤘습니다",
-        "교실이 깔끔하게 정돈되었습니다",
-        "마법 흔적을 청소했습니다",
-        "다음 수업 준비를 완료했습니다",
-        "부서진 물건은 따로 분류했습니다",
-        "변신 실패작들을 수거했습니다",
-        "책상을 제자리에 배치했습니다"
+        "교실이 깔끔하게 정돈되었습니다"
       ]
     },
     "기숙사 순찰 보조" => {
@@ -170,72 +123,62 @@ class JobStartCommand
         "통행금지 시간을 확인했습니다",
         "어두운 복도에서도 침착했습니다",
         "규칙을 어긴 학생을 발견했습니다",
-        "문이 잘 잠겨있는지 확인했습니다",
-        "이상한 소리를 주의깊게 들었습니다",
-        "손전등으로 구석을 비췄습니다",
-        "순찰 일지를 작성했습니다",
-        "야간 근무를 무사히 마쳤습니다",
-        "다음 순찰조에게 인계했습니다"
+        "문이 잘 잠겨있는지 확인했습니다"
       ]
     }
   }
 
-  def initialize(mastodon_client, sheet_manager)
-    @mastodon_client = mastodon_client
+  def initialize(client, sheet_manager, notification, sender, job_name)
+    @client = client
     @sheet_manager = sheet_manager
+    @notification = notification
+    @sender = sender.gsub('@', '')
+    @job_name = job_name
   end
 
-  def execute(user_id, job_name, reply_status)
-    user = @sheet_manager.find_user(user_id)
+  def execute
+    user = @sheet_manager.find_user(@sender)
     
     unless user
-      @mastodon_client.reply(
-        "@#{user_id} 아직 입학하지 않으셨네요!",
-        reply_status['id']
-      )
+      reply("@#{@sender} 아직 입학하지 않으셨네요!")
       return
     end
 
-    # 쿨타임 체크
-    if on_cooldown?(user_id)
-      remaining = cooldown_remaining(user_id)
-      @mastodon_client.reply(
-        "@#{user_id} 아직 피곤하시군요! #{remaining} 후에 다시 올 수 있어요.",
-        reply_status['id']
-      )
+    if on_cooldown?(@sender)
+      remaining = cooldown_remaining(@sender)
+      reply("@#{@sender} 아직 피곤하시군요! #{remaining} 후에 다시 올 수 있어요.")
       return
     end
 
-    # 작업 찾기
-    job = JOBS[job_name]
+    job = JOBS[@job_name]
     unless job
-      @mastodon_client.reply(
-        "@#{user_id} 그런 아르바이트는 없는데요? [알바목록]으로 확인해보세요!",
-        reply_status['id']
-      )
+      reply("@#{@sender} 그런 아르바이트는 없는데요?")
       return
     end
 
-    # 아르바이트 실행
-    result = perform_job(user, job, job_name)
+    result = perform_job(user, job)
     
-    # 쿨타임 기록
-    @@last_job_time[user_id] = Time.now
+    @@last_job_time[@sender] = Time.now
     
-    # 결과 메시지 전송
-    message = build_result_message(user_id, user[:name] || user_id, job_name, result, job)
-    
-    # 메시지 길이 체크
+    message = build_result_message(result, job)
     puts "[알바결과] 메시지 길이: #{message.length}자"
     
-    @mastodon_client.reply(message, reply_status['id'])
+    reply(message)
   end
 
   private
 
+  def reply(text)
+    status_id = @notification.dig("status", "id")
+    return unless status_id
+    
+    @client.post_status(text, reply_to_id: status_id, visibility: "unlisted")
+  rescue => e
+    puts "[답글 에러] #{e.message}"
+  end
+
   def on_cooldown?(user_id)
     return false unless @@last_job_time[user_id]
-    
     elapsed = Time.now - @@last_job_time[user_id]
     elapsed < (COOLDOWN_HOURS * 3600)
   end
@@ -246,18 +189,12 @@ class JobStartCommand
     hours = (remaining_seconds / 3600).floor
     minutes = ((remaining_seconds % 3600) / 60).ceil
     
-    if hours > 0
-      "약 #{hours}시간 #{minutes}분"
-    else
-      "약 #{minutes}분"
-    end
+    hours > 0 ? "약 #{hours}시간 #{minutes}분" : "약 #{minutes}분"
   end
 
-  def perform_job(user, job, job_name)
-    # 주 스탯
+  def perform_job(user, job)
     stat_value = get_stat_value(user, job[:stat])
     
-    # 4번의 작업 판정
     rolls = []
     total_performance = 0
     
@@ -265,14 +202,11 @@ class JobStartCommand
       roll = rand(1..20)
       modified_roll = roll + (stat_value / 5)
       
-      # 크리티컬/대실패
       critical = (roll == 20)
       fumble = (roll == 1)
       
       performance = calculate_performance(modified_roll, critical, fumble)
       total_performance += performance
-      
-      event = job[:events].sample
       
       rolls << {
         number: i + 1,
@@ -281,29 +215,21 @@ class JobStartCommand
         performance: performance,
         critical: critical,
         fumble: fumble,
-        event: event
+        event: job[:events].sample
       }
     end
     
-    # 평균 작업 능률
     avg_performance = total_performance / 4.0
-    
-    # 최종 급여 계산
     base_pay = job[:base_pay]
     final_pay = (base_pay * (avg_performance / 100.0)).round
-    
-    # 최소 급여 보장 (10%)
     min_pay = (base_pay * 0.1).round
     final_pay = [final_pay, min_pay].max
     
-    # 3연속 고득점 보너스 체크
     bonus = check_streak_bonus(rolls)
     final_pay += bonus if bonus > 0
     
-    # 갈레온 실제 반영
-    current_galleons = get_current_galleons(user[:id] || user["아이디"])
-    new_galleons = current_galleons + final_pay
-    @sheet_manager.update_galleons(user[:id] || user["아이디"], new_galleons)
+    # 갈레온 증가량만 전달
+    @sheet_manager.update_galleons(@sender, final_pay)
     
     {
       rolls: rolls,
@@ -318,7 +244,6 @@ class JobStartCommand
     return 0 if fumble
     return 100 if critical
     
-    # 수정된 굴림값을 백분율로 변환
     max_roll = 25
     performance = ((modified_roll - 1) * 100.0 / (max_roll - 1)).round
     [0, [performance, 100].min].max
@@ -337,38 +262,24 @@ class JobStartCommand
       end
     end
     
-    return 5 if max_consecutive >= 3
-    0
+    max_consecutive >= 3 ? 5 : 0
   end
 
   def get_stat_value(user, stat)
     case stat
-    when :luck then (user[:luck] || user["행운"] || 0).to_i
-    when :agility then (user[:agility] || user["민첩"] || 0).to_i
-    when :attack then (user[:attack] || user["공격"] || 0).to_i
-    when :defense then (user[:defense] || user["방어"] || 0).to_i
+    when :luck then user[:luck] || 0
+    when :agility then user[:agility] || 0
+    when :attack then user[:attack] || 0
+    when :defense then user[:defense] || 0
     else 0
     end
   end
 
-  def get_current_galleons(user_id)
-    rows = @sheet_manager.read_values("사용자!A:K")
-    return 0 unless rows
-
-    rows.each_with_index do |row, idx|
-      next if idx == 0
-      if row[0]&.gsub('@', '') == user_id.gsub('@', '')
-        return (row[2] || 0).to_i
-      end
-    end
-    0
-  end
-
-  def build_result_message(user_id, name, job_name, result, job)
+  def build_result_message(result, job)
     lines = []
-    lines << "@#{user_id}"
+    lines << "@#{@sender}"
     lines << "━━━━━━━━━━━━━━━━━━"
-    lines << "#{job_name} 완료"
+    lines << "#{@job_name} 완료"
     lines << "━━━━━━━━━━━━━━━━━━"
     lines << ""
     
@@ -393,11 +304,7 @@ class JobStartCommand
     lines << "━━━━━━━━━━━━━━━━━━"
     lines << "평균 작업률: #{result[:avg_performance]}%"
     lines << "기본급: #{result[:base_pay]}G"
-    
-    if result[:bonus] > 0
-      lines << "보너스: +#{result[:bonus]}G"
-    end
-    
+    lines << "보너스: +#{result[:bonus]}G" if result[:bonus] > 0
     lines << "최종: #{result[:final_pay]}G"
     lines << "━━━━━━━━━━━━━━━━━━"
     lines << "쿨타임: #{COOLDOWN_HOURS}시간"
